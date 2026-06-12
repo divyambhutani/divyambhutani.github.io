@@ -189,6 +189,12 @@
   .job ul{list-style:none;display:flex;flex-direction:column;gap:9px}
   .job li{font-size:14px;color:var(--violet);padding-left:18px;position:relative}
   .job li::before{content:"▸";position:absolute;left:0;color:var(--magenta)}
+  .hld-link{
+    display:inline-flex;align-items:center;gap:8px;margin-top:14px;
+    font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);
+    border:1px solid var(--line);padding:9px 14px;transition:all .25s;
+  }
+  .hld-link:hover{border-color:var(--cyan);box-shadow:0 0 18px rgba(0,229,255,0.3)}
 
   /* PROJECTS / SKILLS cards */
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
@@ -271,6 +277,7 @@
       <li>Designed event-driven pipelines with idempotent processing, retries, and fault-tolerant execution; established on-call, alerting, and SOPs for SLA adherence.</li>
       <li>Card payment gateway: scaled 0 → 10K+ daily transactions, led HSBC HK acquirer onboarding, integrated UnionPay, and improved throughput 2.5x.</li>
     </ul>
+    <a class="hld-link" href="settlement-hld.html">⬡ explore the 3D system diagram ↗</a>
   </div>
 
   <div class="job">

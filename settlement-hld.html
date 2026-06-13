@@ -95,7 +95,8 @@
     <div class="row"><span class="sw" style="background:#ff2d95;color:#ff2d95"></span>kafka — message bus</div>
     <div class="row"><span class="sw" style="background:#00e5ff;color:#00e5ff"></span>internal services</div>
     <div class="row"><span class="sw" style="background:#ffb800;color:#ffb800"></span>data stores</div>
-    <div class="row"><span class="sw" style="background:#39d98a;color:#39d98a"></span>ops console / reverse flow</div>
+    <div class="row"><span class="sw" style="background:#39d98a;color:#39d98a"></span>remote desktop / reverse flow</div>
+    <div class="row"><span class="sw" style="background:#ff5f56;color:#ff5f56"></span>card networks</div>
   </div>
   <div class="hint">drag to orbit · scroll to zoom</div>
   <a class="back" href="index.html">← portfolio</a>
@@ -132,14 +133,18 @@ const PARTICLE_REVERSE = 0x39d98a;
 
 /* ---- diagram data: this object IS the diagram ---- */
 const nodes = [
-  { id: 'banks',  label: 'Banks / PSPs',     type: 'external', shape: 'cuboid',   pos: [-18,  0,  0] },
-  { id: 's3in',   label: 'S3 · MIS Files',   type: 'store',    shape: 'bucket',   pos: [-12,  0,  3.5] },
-  { id: 'ingest', label: 'Ingestion Svc',    type: 'ingress',  shape: 'cuboid',   pos: [ -6,  0, -1.5] },
-  { id: 'kafka',  label: 'Kafka',            type: 'kafka',    shape: 'queue',    pos: [  0.5,0,  1] },
-  { id: 'recon',  label: 'Recon Engine',     type: 'internal', shape: 'cuboid',   pos: [  7,  0, -2.5] },
-  { id: 'pg',     label: 'PostgreSQL',       type: 'store',    shape: 'cylinder', pos: [  7, -5,  3.5] },
-  { id: 'settle', label: 'Settlement Svc',   type: 'egress',   shape: 'cuboid',   pos: [ 13,  0,  1] },
-  { id: 'ops',    label: 'Ops Console',      type: 'sync',     shape: 'monitor',  pos: [ 19,  0, -1] },
+  { id: 'banks',  label: 'Banks / PSPs',         type: 'external', shape: 'cuboid',   pos: [-21,  0,  0] },
+  { id: 's3in',   label: 'S3 · MIS Files',       type: 'store',    shape: 'bucket',   pos: [-15,  0,  3.5] },
+  { id: 'ingest', label: 'Ingestion Svc',        type: 'ingress',  shape: 'cuboid',   pos: [ -9,  0, -1.5] },
+  { id: 'kafka',  label: 'Kafka',                type: 'kafka',    shape: 'queue',    pos: [ -2.5,0,  1] },
+  { id: 'recon',  label: 'Recon Engine',         type: 'internal', shape: 'cuboid',   pos: [  4,  0, -2.5] },
+  { id: 'pg',     label: 'PostgreSQL',           type: 'store',    shape: 'cylinder', pos: [  7, -5,  3.5] },
+  { id: 'redis',  label: 'Redis',                type: 'store',    shape: 'cylinder', pos: [ 10, -4.5, -3.5] },
+  { id: 'settle', label: 'Settlement Svc',       type: 'egress',   shape: 'cuboid',   pos: [ 10,  0,  1] },
+  { id: 's3out',  label: 'S3 · Settlement Files',type: 'store',    shape: 'bucket',   pos: [ 15.5,0,  3.5] },
+  { id: 'rd',     label: 'Remote Desktop',       type: 'sync',     shape: 'monitor',  pos: [ 20.5, 0, -4] },
+  { id: 'visa',   label: 'Visa',                 type: 'card',     shape: 'cuboid',   pos: [ 26,  2.5,  0] },
+  { id: 'mc',     label: 'Mastercard',           type: 'card',     shape: 'cuboid',   pos: [ 26, -2.5,  3] },
 ];
 const edges = [
   // [from, to, bidirectional?]
@@ -150,7 +155,11 @@ const edges = [
   ['recon',  'pg',     true ],
   ['recon',  'settle', false],
   ['settle', 'pg',     false],
-  ['settle', 'ops',    false],
+  ['settle', 'redis',  false],
+  ['settle', 's3out',  false],
+  ['s3out',  'rd',     true ],
+  ['rd',     'visa',   false],
+  ['rd',     'mc',     false],
 ];
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -161,7 +170,7 @@ const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x020207, 0.03);
 
 const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 200);
-camera.position.set(0, 9, 26);
+camera.position.set(2, 10, 31);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(innerWidth, innerHeight);
@@ -173,8 +182,8 @@ controls.enableDamping = true;
 controls.autoRotate = !reducedMotion;
 controls.autoRotateSpeed = 0.55;
 controls.minDistance = 10;
-controls.maxDistance = 55;
-controls.target.set(0, -1, 0);
+controls.maxDistance = 62;
+controls.target.set(2, -1, 0);
 
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));

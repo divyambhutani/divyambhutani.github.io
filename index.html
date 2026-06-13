@@ -88,15 +88,47 @@
     .stars i{animation:none;opacity:0.7}
   }
 
-  /* WIP ribbon */
+  /* WIP ribbon — flickering neon hazard sign */
   .wip{
     position:fixed;top:0;left:0;right:0;z-index:101;height:30px;
-    display:flex;align-items:center;justify-content:center;gap:10px;
-    font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;
-    color:var(--bg);background:linear-gradient(90deg,var(--magenta),var(--cyan));
+    display:flex;align-items:center;justify-content:center;gap:13px;
+    font-size:11px;letter-spacing:4px;text-transform:uppercase;font-weight:700;
+    background:
+      repeating-linear-gradient(45deg,rgba(255,176,0,0.09) 0 13px,rgba(0,0,0,0) 13px 26px),
+      #0a0602;
+    border-bottom:1px solid rgba(255,176,0,0.5);
   }
-  .wip .blink{width:7px;height:7px;border-radius:50%;background:var(--bg);animation:wipblink 1.2s steps(1) infinite}
-  @keyframes wipblink{0%,50%{opacity:1}51%,100%{opacity:0.15}}
+  .wip-txt{
+    color:#ffb300;
+    text-shadow:0 0 5px rgba(255,176,0,0.95),0 0 13px rgba(255,140,0,0.6),0 0 26px rgba(255,80,0,0.35);
+    animation:wipflicker 4.3s linear infinite;
+  }
+  .wip .warn{
+    color:#ff6a00;font-size:13px;line-height:1;
+    text-shadow:0 0 6px rgba(255,106,0,0.9),0 0 15px rgba(255,50,0,0.55);
+    animation:wipbeacon 2.7s linear infinite;
+  }
+  /* uneven dying-tube flicker: long steady-on, sudden deaths, stutters */
+  @keyframes wipflicker{
+    0%,8%,10%,33%,36%,62%,64%,89%,100%{opacity:1}
+    9%{opacity:0.3}
+    34%,35%{opacity:0.14}
+    37%{opacity:0.6}
+    63%{opacity:0.07}
+    90%,92%,94%{opacity:0.2}
+    91%,93%{opacity:0.85}
+  }
+  /* warning beacons pulse on a different, offbeat cycle so the two never sync */
+  @keyframes wipbeacon{
+    0%,14%,17%,55%,58%,100%{opacity:1}
+    15%,16%{opacity:0.1}
+    56%,57%{opacity:0.28}
+    75%,77%,79%{opacity:0.15}
+    76%,78%{opacity:0.9}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .wip-txt,.wip .warn{animation:none;opacity:1}
+  }
 
   /* NAV */
   nav{
@@ -231,7 +263,7 @@
 </head>
 <body>
 
-<div class="wip"><span class="blink"></span>WIP — work in progress</div>
+<div class="wip"><span class="warn">⚠</span><span class="wip-txt">WIP — work in progress</span><span class="warn">⚠</span></div>
 
 <div class="stars"><i class="s1"></i><i class="s2"></i><i class="s3"></i></div>
 

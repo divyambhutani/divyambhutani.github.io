@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Divyam Bhutani — Backend Engineer</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%23020207'/%3E%3Ctext%20x='16'%20y='13.5'%20font-family='Orbitron,Arial,sans-serif'%20font-size='13'%20font-weight='900'%20text-anchor='middle'%20fill='%23ff2d95'%3ED%3C/text%3E%3Ctext%20x='16'%20y='27'%20font-family='Orbitron,Arial,sans-serif'%20font-size='13'%20font-weight='900'%20text-anchor='middle'%20fill='%2300e5ff'%3EB%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
@@ -30,15 +31,15 @@
     overflow-x:hidden;
     position:relative;
   }
-  /* scanline overlay */
+  /* scanline overlay — starts below the 30px WIP ribbon so the ribbon stays crisp */
   body::after{
-    content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;
+    content:"";position:fixed;top:30px;left:0;right:0;bottom:0;z-index:9999;pointer-events:none;
     background:linear-gradient(transparent 50%, rgba(0,0,0,0.22) 50%);
     background-size:100% 4px;opacity:0.25;
   }
-  /* grain */
+  /* grain — also kept off the ribbon strip */
   body::before{
-    content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.04;
+    content:"";position:fixed;top:30px;left:0;right:0;bottom:0;z-index:9998;pointer-events:none;opacity:0.04;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   a{color:inherit;text-decoration:none}
@@ -89,62 +90,44 @@
     .stars i{animation:none;opacity:0.7}
   }
 
-  /* WIP ribbon — Tron HUD: flowing neon frame, glitch text, capsule-dash runner */
+  /* WIP ribbon — A2: flowing neon frame, clean text, single yellow-dash runner (above scanline/grain overlays) */
   .wip{
     position:fixed;top:0;left:0;right:0;z-index:101;height:30px;overflow:hidden;
     display:flex;align-items:center;justify-content:center;gap:13px;
     font-size:11px;letter-spacing:4px;text-transform:uppercase;font-weight:700;
     background:#06060f;
   }
-  /* flowing magenta·cyan·yellow frame */
+  /* flowing magenta·cyan frame — no yellow, so the runner is the only yellow */
   .wip::before{
     content:"";position:absolute;inset:0;z-index:1;padding:2px;pointer-events:none;
-    background:linear-gradient(90deg,var(--magenta),var(--cyan),var(--yellow),var(--cyan),var(--magenta));
+    background:linear-gradient(90deg,var(--magenta),var(--cyan),var(--magenta),var(--cyan),var(--magenta));
     background-size:300% 100%;
     -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
     -webkit-mask-composite:xor;mask-composite:exclude;
     animation:wipflow 2.6s linear infinite;
   }
   @keyframes wipflow{to{background-position:300% 0}}
-  /* glitch text — magenta/cyan chromatic-aberration tears + yellow surge */
+  /* clean neon text — matches A2 sample (no chromatic tears) */
   .wip-txt{
-    position:relative;z-index:2;white-space:nowrap;color:var(--ink);display:inline-block;
-    text-shadow:0 0 6px rgba(0,229,255,0.5);animation:wipsurge 3.2s steps(1) infinite;
+    position:relative;z-index:2;white-space:nowrap;color:var(--ink);
+    text-shadow:0 0 6px rgba(0,229,255,0.5);
   }
-  .wip-txt::before,.wip-txt::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-  .wip-txt::before{color:var(--magenta);z-index:-1;animation:wipgA 2.2s steps(1) infinite}
-  .wip-txt::after{color:var(--cyan);z-index:-1;animation:wipgB 2.7s steps(1) infinite}
-  @keyframes wipsurge{0%,28%,34%,100%{text-shadow:0 0 6px rgba(0,229,255,0.5)}30%,32%{text-shadow:0 0 6px var(--yellow),0 0 16px rgba(252,238,10,0.65)}31%{text-shadow:none}}
-  @keyframes wipgA{
-    0%,5%,100%{transform:translate(0,0);clip-path:none}
-    6%{transform:translate(-3px,1px);clip-path:inset(0 0 62% 0)}7%{transform:translate(3px,-1px);clip-path:inset(68% 0 0 0)}8%{transform:translate(0,0);clip-path:none}
-    24%{transform:translate(4px,0);clip-path:inset(40% 0 28% 0)}25%{transform:translate(-3px,0);clip-path:none}
-    46%,48%{transform:translate(-4px,1px);clip-path:inset(18% 0 55% 0)}47%{transform:translate(3px,-1px);clip-path:inset(58% 0 12% 0)}
-    70%{transform:translate(3px,0);clip-path:inset(45% 0 25% 0)}71%{transform:translate(0,0);clip-path:none}
-    88%,90%{transform:translate(-3px,1px);clip-path:inset(25% 0 50% 0)}89%{transform:translate(3px,0);clip-path:inset(50% 0 18% 0)}
-  }
-  @keyframes wipgB{
-    0%,10%,100%{transform:translate(0,0);clip-path:none}
-    11%{transform:translate(3px,-1px);clip-path:inset(52% 0 0 0)}12%{transform:translate(-3px,1px);clip-path:inset(0 0 58% 0)}13%{transform:translate(0,0);clip-path:none}
-    33%{transform:translate(-4px,0);clip-path:inset(33% 0 33% 0)}34%{transform:translate(3px,0);clip-path:none}
-    58%,60%{transform:translate(4px,-1px);clip-path:inset(12% 0 52% 0)}59%{transform:translate(-3px,1px);clip-path:inset(48% 0 22% 0)}
-    82%{transform:translate(-3px,0);clip-path:inset(38% 0 30% 0)}83%{transform:translate(0,0);clip-path:none}
-  }
-  /* yellow HUD corner brackets, offbeat blink */
-  .wip .sym{color:var(--yellow);z-index:2;font-size:14px;line-height:1;text-shadow:0 0 6px var(--yellow),0 0 14px rgba(252,238,10,0.6);animation:wipblink 2.4s steps(1) infinite}
-  @keyframes wipblink{0%,46%,100%{opacity:1}47%,49%{opacity:.2}48%{opacity:.7}74%,76%{opacity:.25}75%{opacity:.9}}
-  /* capsule-dash runner — lies along the edge, reorients at corners */
-  .wip .dash{position:absolute;z-index:1;pointer-events:none;background:var(--yellow);border-radius:3px;box-shadow:0 0 10px var(--yellow),0 0 18px rgba(252,238,10,0.7);animation:wipdash 3.4s linear infinite}
+  /* yellow HUD corner brackets — static */
+  .wip .sym{color:var(--yellow);z-index:2;font-size:14px;line-height:1;text-shadow:0 0 6px var(--yellow),0 0 14px rgba(252,238,10,0.6)}
+  /* A2 — single yellow-neon dash runner: the only yellow on the frame, laps it at a trackable pace */
+  .wip .dash{position:absolute;z-index:3;pointer-events:none;background:var(--yellow);border-radius:3px;
+    box-shadow:0 0 4px #fffbe0,0 0 10px var(--yellow),0 0 20px var(--yellow),0 0 34px rgba(252,238,10,0.55);
+    animation:wipdash 4.5s linear infinite}
   @keyframes wipdash{
-    0%   {top:-3px;left:0;                 width:26px;height:4px}
-    22%  {top:-3px;left:calc(100% - 26px); width:26px;height:4px}
-    25%  {top:0;   left:calc(100% - 4px);  width:4px; height:26px}
-    47%  {top:calc(100% - 26px);left:calc(100% - 4px);width:4px;height:26px}
-    50%  {top:calc(100% - 4px); left:calc(100% - 26px);width:26px;height:4px}
-    72%  {top:calc(100% - 4px); left:0;    width:26px;height:4px}
-    75%  {top:calc(100% - 26px);left:0;    width:4px; height:26px}
-    97%  {top:0;   left:0;      width:4px; height:26px}
-    100% {top:-3px;left:0;      width:26px;height:4px}
+    0%   {top:1px;             left:0;                  width:40px;height:5px}
+    24%  {top:1px;             left:calc(100% - 40px);  width:40px;height:5px}
+    27%  {top:1px;             left:calc(100% - 5px);   width:5px; height:22px}
+    48%  {top:calc(100% - 23px);left:calc(100% - 5px);  width:5px; height:22px}
+    51%  {top:calc(100% - 5px); left:calc(100% - 40px); width:40px;height:5px}
+    75%  {top:calc(100% - 5px); left:0;                 width:40px;height:5px}
+    78%  {top:calc(100% - 23px);left:0;                 width:5px; height:22px}
+    99%  {top:1px;             left:0;                  width:5px; height:22px}
+    100% {top:1px;             left:0;                  width:40px;height:5px}
   }
   @media(prefers-reduced-motion:reduce){.wip *,.wip::before{animation:none!important}}
 
@@ -239,12 +222,53 @@
   .job ul{list-style:none;display:flex;flex-direction:column;gap:9px}
   .job li{font-size:14px;color:var(--violet);padding-left:18px;position:relative}
   .job li::before{content:"▸";position:absolute;left:0;color:var(--magenta)}
-  .hld-link{
-    display:inline-flex;align-items:center;gap:8px;margin-top:14px;
+  /* sub-project under a single role — cyan node branching off the magenta company line */
+  .subjob{position:relative;margin-top:24px;padding-left:20px;border-left:1px solid var(--line)}
+  .subjob::before{content:"";position:absolute;left:-4px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--bg2);border:1.5px solid var(--cyan);box-shadow:0 0 9px rgba(0,229,255,0.55)}
+  .subjob .proj{font-size:15.5px;color:var(--ink);font-weight:500;letter-spacing:.3px}
+  .subjob .pdate{font-size:12px;color:var(--cyan);margin:3px 0 13px}
+  .subjob .pdate b{color:var(--muted);font-weight:400}
+  /* ---- HLD portal button: breathing hex orb + cyberpunk hover ---- */
+  .hld-portal{
+    position:relative;display:inline-flex;align-items:center;gap:13px;margin-top:16px;
+    padding:12px 20px 12px 15px;cursor:pointer;
     font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);
-    border:1px solid var(--line);padding:9px 14px;transition:all .25s;
+    background:rgba(8,8,26,.55);border:1px solid var(--line);
+    transition:color .28s, box-shadow .28s, border-color .28s, transform .28s;
   }
-  .hld-link:hover{border-color:var(--cyan);box-shadow:0 0 18px rgba(0,229,255,0.3)}
+  /* flowing magenta·cyan border, revealed on hover (mask trick — matches the WIP frame) */
+  .hld-portal::before{
+    content:"";position:absolute;inset:0;padding:1px;pointer-events:none;opacity:0;transition:opacity .3s;
+    background:linear-gradient(90deg,var(--magenta),var(--cyan),var(--magenta),var(--cyan),var(--magenta));
+    background-size:300% 100%;
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+  }
+  .hp-orb{position:relative;width:28px;height:28px;flex:none;display:grid;place-items:center}
+  .hp-hex{width:23px;height:23px;display:block;animation:hpbreath 2.8s ease-in-out infinite}
+  @keyframes hpbreath{
+    0%,100%{filter:drop-shadow(0 0 3px rgba(0,229,255,.7))}
+    50%{filter:drop-shadow(0 0 9px var(--magenta)) drop-shadow(0 0 3px var(--cyan))}
+  }
+  .hp-core{transition:fill .28s, filter .28s}
+  .hp-ring{position:absolute;inset:2px;border-radius:50%;border:1px solid var(--cyan);opacity:0;pointer-events:none}
+  .hp-ring.r2{border-color:var(--magenta)}
+  .hp-txt{position:relative;z-index:2;transition:text-shadow .28s, letter-spacing .28s}
+  .hp-arrow{font-size:14px;transition:transform .28s, filter .28s}
+  .hld-portal:hover{
+    color:var(--ink);border-color:transparent;transform:translateY(-2px);
+    box-shadow:0 0 22px rgba(0,229,255,.30), 0 0 44px rgba(255,45,149,.18), inset 0 0 14px rgba(0,229,255,.10);
+  }
+  .hld-portal:hover::before{opacity:1;animation:hpflow 2.4s linear infinite}
+  @keyframes hpflow{to{background-position:300% 0}}
+  .hld-portal:hover .hp-ring{animation:hpring 1.5s ease-out infinite}
+  .hld-portal:hover .hp-ring.r2{animation-delay:.55s}
+  @keyframes hpring{0%{opacity:.85;transform:scale(.55)}100%{opacity:0;transform:scale(2.1)}}
+  .hld-portal:hover .hp-hex{animation-duration:1.4s;filter:drop-shadow(0 0 10px var(--cyan)) drop-shadow(0 0 5px var(--magenta))}
+  .hld-portal:hover .hp-core{fill:var(--cyan);filter:drop-shadow(0 0 4px var(--cyan))}
+  .hld-portal:hover .hp-txt{letter-spacing:2.6px;text-shadow:0 0 8px rgba(0,229,255,.65),0 0 16px rgba(255,45,149,.35)}
+  .hld-portal:hover .hp-arrow{transform:translateX(5px);filter:drop-shadow(0 0 6px var(--cyan))}
+  @media(prefers-reduced-motion:reduce){.hp-hex,.hp-ring,.hld-portal::before{animation:none!important}}
 
   /* PROJECTS / SKILLS cards */
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
@@ -281,7 +305,7 @@
 </head>
 <body>
 
-<div class="wip"><span class="dash"></span><span class="sym">⌜</span><span class="wip-txt" data-text="WIP — work in progress">WIP — work in progress</span><span class="sym">⌟</span></div>
+<div class="wip"><span class="dash"></span><span class="sym">⌜</span><span class="wip-txt">WIP — work in progress</span><span class="sym">⌟</span></div>
 
 <div class="stars"><i class="s1"></i><i class="s2"></i><i class="s3"></i></div>
 
@@ -321,22 +345,41 @@
   <div class="job">
     <div class="role">Software Development Engineer — Team Lead</div>
     <div class="meta">Juspay · Global Fintech Infrastructure · Jul 2022 – Dec 2025</div>
-    <ul>
-      <li>Architected a reconciliation &amp; settlement platform from day one — owned tech stack (Python, FastAPI, Kafka, PostgreSQL), system design, deployment, and operations end-to-end.</li>
-      <li>Scaled the team from 1 to 8 engineers; ran interviews, mentored, led design reviews, and drove sprint execution.</li>
-      <li>Designed event-driven pipelines with idempotent processing, retries, and fault-tolerant execution; established on-call, alerting, and SOPs for SLA adherence.</li>
-      <li>Card payment gateway: scaled 0 → 10K+ daily transactions, led HSBC HK acquirer onboarding, integrated UnionPay, and improved throughput 2.5x.</li>
-    </ul>
-    <a class="hld-link" href="settlement-hld.html">⬡ explore the 3D system diagram ↗</a>
-  </div>
 
-  <div class="job">
-    <div class="role">SDE — Card Discovery Service (End-to-End Owner)</div>
-    <div class="meta">Juspay · Jul 2022 – Aug 2023</div>
-    <ul>
-      <li>Sole engineer designing, building, and operating the microservice — Haskell, MySQL, Redis; deployed on Kubernetes with CI/CD via Bitbucket &amp; Jenkins.</li>
-      <li>Built logging &amp; observability with Kibana, Prometheus, Grafana; partnered with Epifi, OneCard, and HDFC to tokenize 80K+ newly issued cards.</li>
-    </ul>
+    <div class="subjob">
+      <div class="proj">Reconciliation &amp; Settlement Platform</div>
+      <div class="pdate">Solo Architect → Team Lead <b>· Feb 2025 – Dec 2025</b></div>
+      <ul>
+        <li>Architected the platform from day one — owned the production tech stack (Python, FastAPI, Kafka, PostgreSQL), system design, deployment, and operations end-to-end.</li>
+        <li>Scaled the team from 1 to 8 engineers; ran technical interviews, mentored, led design reviews, and drove sprint execution in a high-ambiguity environment.</li>
+        <li>Designed event-driven reconciliation pipelines with idempotent processing, retries, and fault-tolerant execution; established on-call, alerting, and SOPs for SLA adherence.</li>
+        <li>Built automation (web + Windows app) for settlement-file uploads to Visa and RuPay, eliminating manual midnight operations.</li>
+      </ul>
+      <a class="hld-portal" href="settlement-hld.html">
+        <span class="hp-orb"><span class="hp-ring"></span><span class="hp-ring r2"></span>
+          <svg class="hp-hex" viewBox="0 0 24 24" fill="none"><path d="M12 2 21 7.2v9.6L12 22 3 16.8V7.2z" stroke="#00e5ff" stroke-width="1.6"/><circle class="hp-core" cx="12" cy="12" r="2.5" fill="#ff2d95"/></svg>
+        </span><span class="hp-txt">Open 3D system map</span><span class="hp-arrow">→</span></a>
+    </div>
+
+    <div class="subjob">
+      <div class="proj">Card Payment Gateway</div>
+      <div class="pdate"><b>Jan 2024 – Feb 2025</b></div>
+      <ul>
+        <li>One of four engineers scaling Juspay's card gateway from 0 → 10K+ daily transactions; led HSBC HK acquirer onboarding (non-3DS, SI/mandate/recurring).</li>
+        <li>Integrated the UnionPay network behind a pluggable payment abstraction — core logic centralised, each new integration only defines types and API calls.</li>
+        <li>Built key/certificate rotation and master-key encryption to securely store private keys in the DB, removing manual key management.</li>
+        <li>Improved throughput 2.5x (DB indexing, caching, execution-path optimization) and cut CI build time 35 → 4 min (8x) via dependency build caching and layer reuse.</li>
+      </ul>
+    </div>
+
+    <div class="subjob">
+      <div class="proj">Card Discovery Service</div>
+      <div class="pdate">End-to-End Owner <b>· Jul 2022 – Aug 2023</b></div>
+      <ul>
+        <li>Sole engineer designing, building, and operating the microservice — Haskell, MySQL, Redis; deployed on Kubernetes (Autopilot) with CI/CD via Bitbucket &amp; Jenkins.</li>
+        <li>Built logging &amp; observability with Kibana, Prometheus, Grafana; partnered with Epifi, OneCard, and HDFC to tokenize 80K+ newly issued cards.</li>
+      </ul>
+    </div>
   </div>
 
   <div class="job">

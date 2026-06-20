@@ -397,6 +397,15 @@
   <h2>Built on my own time</h2>
   <p style="color:var(--muted);font-size:13px;margin:-26px 0 34px;max-width:520px">Side projects where I chase curiosity — mostly agentic AI pipelines and developer tooling. Work projects live under Experience above.</p>
   <div class="cards">
+    <div class="card" id="crawl">
+      <h3><span class="dot"></span><a href="https://github.com/divyambhutani/crawl_core" target="_blank" rel="noopener">Crawl Core</a><a class="ext" href="https://github.com/divyambhutani/crawl_core" target="_blank" rel="noopener">↗</a></h3>
+      <p>Systems-design assignment + live service. A FastAPI crawler that fetches any URL (curl_cffi with a Playwright fallback for JS-heavy pages), extracts metadata + clean body text, and classifies page type, topics &amp; summary (BART-MNLI zero-shot locally / Gemini Flash on cloud). The HLD scales this single unit into a billions-of-URLs/month Kafka pipeline with S3 + ClickHouse.</p>
+      <div class="tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Kafka</span><span class="tag">ClickHouse</span><span class="tag">System Design</span></div>
+      <a class="hld-portal" href="crawl-hld.html">
+        <span class="hp-orb"><span class="hp-ring"></span><span class="hp-ring r2"></span>
+          <svg class="hp-hex" viewBox="0 0 24 24" fill="none"><path d="M12 2 21 7.2v9.6L12 22 3 16.8V7.2z" stroke="#00e5ff" stroke-width="1.6"/><circle class="hp-core" cx="12" cy="12" r="2.5" fill="#ff2d95"/></svg>
+        </span><span class="hp-txt">Open 3D system map</span><span class="hp-arrow">→</span></a>
+    </div>
     <a href="https://github.com/divyambhutani/job_sherpa_old" target="_blank" rel="noopener" class="card">
       <h3><span class="dot"></span>JobSherpa <span class="ext">↗</span></h3>
       <p>Agentic AI pipeline that parses a resume + job description, scrapes real-time interview and salary data (Glassdoor, AmbitionBox, Levels.fyi), and generates a visual PDF report with rubrics, ATS scoring, and an interview roadmap.</p>

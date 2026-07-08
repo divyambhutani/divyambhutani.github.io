@@ -11,9 +11,15 @@ hybrid shelves); user picked slide deck with "minimalist, black and pink only" d
 
 - **Navigation model:** Slide deck — each section is a full-viewport slide; one wheel flick,
   arrow key, or nav click moves exactly one slide left/right. No free panning.
-- **Palette:** True black `#000` ground; `#ff2d95` pink as the *only* color; pink-biased
-  off-white ink `#f4edf1`; pink-biased muted grey `#7d7381`; hairline `rgba(255,45,149,.22)`.
-  Cyan, yellow, violet retired from `index.html`.
+- **Palette (final, after iteration):** True black `#000` ground; ink `#f2f2f4`; muted grey
+  `#7c7a84`; neutral hairline `rgba(255,255,255,.13)`. Pink `#ff2d95` confined to exactly four
+  places: "Bhutani" in the hero, the logo `//`, the "view work" CTA, and the active slide dash.
+  A sky-blue accent was tried and removed on user feedback. Cyan, yellow, violet retired from
+  `index.html`.
+- **Visual-over-text (user iteration):** each numbered slide carries a huge outline-stroke
+  background numeral (`-webkit-text-stroke`, `rgba(255,255,255,.09)`, hidden on mobile);
+  experience bullets cut to 1–2 short lines with tech moved into chips; project cards are one
+  plain-language sentence + tech chips; hero sub is one sentence; contact sub is "Inbox is open."
 - **Effects retired:** starfield, scanlines, grain, grid floor, sun glow, glitch text, neon
   flood. Minimal = precision in spacing/type, not effects.
 - **Type:** No webfont dependency required by the design; display = heavy `system-ui` stack

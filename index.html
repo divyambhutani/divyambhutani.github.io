@@ -1,312 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Divyam Bhutani — Backend Engineer</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%23020207'/%3E%3Ctext%20x='16'%20y='13.5'%20font-family='Orbitron,Arial,sans-serif'%20font-size='13'%20font-weight='900'%20text-anchor='middle'%20fill='%23ff2d95'%3ED%3C/text%3E%3Ctext%20x='16'%20y='27'%20font-family='Orbitron,Arial,sans-serif'%20font-size='13'%20font-weight='900'%20text-anchor='middle'%20fill='%2300e5ff'%3EB%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='700' fill='%23ff2d95' text-anchor='middle'%3EDB%3C/text%3E%3C/svg%3E">
 <style>
   :root{
-    --bg:#020207;
-    --bg2:#05050d;
-    --panel:#08081a;
-    --magenta:#ff2d95;
-    --cyan:#00e5ff;
-    --violet:#c9bdf0;
-    --ink:#eafcff;
-    --muted:#7d86b5;
-    --line:#16182e;
-    --yellow:#fcee0a;
+    --bg:#000;--ink:#f2f2f4;--pink:#ff2d95;--muted:#7c7a84;--hair:rgba(255,255,255,.13);
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --disp:system-ui,-apple-system,"Segoe UI",sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'JetBrains Mono',monospace;
-    line-height:1.7;
-    overflow-x:hidden;
-    position:relative;
-  }
-  /* scanline overlay */
-  body::after{
-    content:"";position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;pointer-events:none;
-    background:linear-gradient(transparent 50%, rgba(0,0,0,0.22) 50%);
-    background-size:100% 4px;opacity:0.25;
-  }
-  /* grain */
-  body::before{
-    content:"";position:fixed;top:0;left:0;right:0;bottom:0;z-index:9998;pointer-events:none;opacity:0.04;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--mono)}
   a{color:inherit;text-decoration:none}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
-
-  /* ---- twinkling starfield ---- */
-  .stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-  .stars i{
-    position:absolute;width:100%;height:100%;display:block;
-    background-repeat:repeat;
-  }
-  .stars .s1{
-    background-image:
-      radial-gradient(1px 1px at 20% 30%, #fff, transparent),
-      radial-gradient(1px 1px at 70% 80%, #fff, transparent),
-      radial-gradient(1px 1px at 40% 60%, #fff, transparent),
-      radial-gradient(1.5px 1.5px at 90% 20%, #fff, transparent),
-      radial-gradient(1px 1px at 10% 90%, #fff, transparent),
-      radial-gradient(1px 1px at 55% 15%, #fff, transparent);
-    background-size:320px 320px;
-    animation:twinkle 3.5s ease-in-out infinite;
-  }
-  .stars .s2{
-    background-image:
-      radial-gradient(1px 1px at 35% 45%, #cfefff, transparent),
-      radial-gradient(1.5px 1.5px at 80% 35%, #fff, transparent),
-      radial-gradient(1px 1px at 15% 65%, #fff, transparent),
-      radial-gradient(1px 1px at 60% 90%, #ffd9f2, transparent),
-      radial-gradient(1px 1px at 95% 70%, #fff, transparent);
-    background-size:480px 480px;
-    animation:twinkle 5s ease-in-out infinite;
-    animation-delay:1s;
-  }
-  .stars .s3{
-    background-image:
-      radial-gradient(2px 2px at 25% 25%, #fff, transparent),
-      radial-gradient(1.5px 1.5px at 75% 55%, #d6f6ff, transparent),
-      radial-gradient(2px 2px at 50% 80%, #fff, transparent);
-    background-size:680px 680px;
-    animation:twinkle 7s ease-in-out infinite;
-    animation-delay:2.5s;
-  }
-  @keyframes twinkle{
-    0%,100%{opacity:0.35}
-    50%{opacity:1}
-  }
-  @media(prefers-reduced-motion:reduce){
-    .stars i{animation:none;opacity:0.7}
-  }
-
-  /* scroll-progress rail — pinned to the very top, tracks scroll % */
-  .progress{
-    position:fixed;top:0;left:0;height:2px;width:0;z-index:102;pointer-events:none;
-    background:linear-gradient(90deg,var(--magenta),var(--cyan));
-    box-shadow:0 0 8px rgba(0,229,255,0.6),0 0 4px rgba(255,45,149,0.5);
-  }
+  ::selection{background:var(--pink);color:#000}
 
   /* NAV */
-  nav{
-    position:fixed;top:0;left:0;right:0;z-index:100;
-    backdrop-filter:blur(10px);background:rgba(10,6,18,0.7);
-    border-bottom:1px solid var(--line);
-  }
-  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
-  .logo{font-family:'Orbitron';font-weight:700;letter-spacing:2px;font-size:15px;color:var(--ink)}
-  .logo b{color:var(--magenta)}
-  .navlinks{display:flex;gap:26px;font-size:13px;color:var(--muted)}
-  .navlinks a{transition:color .2s;position:relative}
-  .navlinks a:hover{color:var(--cyan)}
-  .navlinks a::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:1px;background:var(--cyan);transition:width .25s}
-  .navlinks a:hover::after{width:100%}
-  .navlinks a.active{color:var(--cyan);text-shadow:0 0 8px rgba(0,229,255,0.5)}
-  .navlinks a.active::after{width:100%}
-  @media(max-width:680px){.navlinks{display:none}}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;
+      align-items:center;padding:15px 34px;background:rgba(0,0,0,.85);border-bottom:1px solid var(--hair)}
+  .logo{font-family:var(--disp);font-weight:850;font-size:15px;letter-spacing:.06em}
+  .logo b{color:var(--pink);font-weight:850}
+  .navlinks{display:flex;gap:26px;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+  .navlinks a{color:var(--muted);cursor:pointer}
+  .navlinks a.active{color:var(--ink)}
+  .navlinks a:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
 
-  /* HERO */
-  header{
-    position:relative;min-height:100vh;display:flex;align-items:center;
-    overflow:hidden;
-  }
-  .grid-floor{
-    position:absolute;left:-20%;right:-20%;bottom:0;height:45vh;z-index:0;
-    background-image:
-      linear-gradient(rgba(255,45,149,0.35) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,229,255,0.30) 1px, transparent 1px);
-    background-size:54px 54px;
-    transform:perspective(320px) rotateX(68deg);
-    transform-origin:bottom;
-    mask-image:linear-gradient(transparent, #000 70%);
-    -webkit-mask-image:linear-gradient(transparent, #000 70%);
-    animation:flow 7s linear infinite;
-  }
-  @keyframes flow{from{background-position-y:0,0}to{background-position-y:54px,54px}}
-  .sun{
-    position:absolute;top:22%;left:50%;transform:translateX(-50%);
-    width:340px;height:340px;border-radius:50%;z-index:0;
-    background:radial-gradient(circle at 50% 60%, rgba(255,45,149,0.20), rgba(13,2,33,0) 62%);
-    filter:blur(8px);
-  }
-  .hero-inner{position:relative;z-index:2;padding-top:92px}
-  .tagline{
-    color:var(--cyan);font-size:12px;letter-spacing:4px;margin-bottom:20px;
-    text-transform:uppercase;display:flex;align-items:center;gap:12px;
-    opacity:0;animation:rise .7s .1s forwards;
-  }
-  .tagline::before{content:"";width:36px;height:1px;background:var(--cyan)}
-  h1{
-    font-family:'Orbitron';font-weight:900;font-size:clamp(38px,8vw,84px);
-    line-height:0.98;letter-spacing:1px;color:var(--ink);
-    text-shadow:0 0 18px rgba(255,45,149,0.35);
-    opacity:0;animation:rise .7s .25s forwards;
-  }
-  h1 .accent{color:var(--magenta)}
-  .sub{
-    margin-top:22px;max-width:540px;color:var(--violet);font-size:15px;
-    opacity:0;animation:rise .7s .4s forwards;
-  }
-  .cta{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:rise .7s .55s forwards}
-  .btn{
-    font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:13px 22px;
-    border:1px solid var(--line);transition:all .25s;cursor:pointer;background:transparent;color:var(--ink);
-  }
-  .btn.primary{border-color:var(--magenta);color:var(--magenta)}
-  .btn.primary:hover{background:var(--magenta);color:var(--bg);box-shadow:0 0 22px rgba(255,45,149,0.5)}
-  .btn.ghost:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 18px rgba(0,229,255,0.3)}
-  @keyframes rise{to{opacity:1;transform:translateY(0)}}
-  .tagline,h1,.sub,.cta{transform:translateY(18px)}
+  /* DECK */
+  main{height:100vh;overflow:hidden}
+  #track{display:flex;height:100vh;will-change:transform;
+         transition:transform .55s cubic-bezier(.22,.9,.24,1)}
+  section{min-width:100vw;height:100vh;display:flex;flex-direction:column;
+          justify-content:center;padding:80px 8vw 70px;position:relative}
+  .bignum{position:absolute;right:3vw;bottom:0;font-family:var(--disp);font-weight:850;
+          font-size:44vh;line-height:.82;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.09);
+          pointer-events:none;user-select:none;z-index:0}
+  section>*:not(.bignum){position:relative;z-index:1}
 
-  /* STATS strip */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:54px;opacity:0;animation:rise .7s .7s forwards}
-  .stat{background:var(--bg2);padding:18px 16px}
-  .stat .n{font-family:'Orbitron';font-weight:700;font-size:22px;color:var(--cyan)}
-  .stat .l{font-size:10px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-top:4px}
-  @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .tag{font-size:11px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;margin-bottom:16px}
+  h1{font-family:var(--disp);font-weight:850;font-size:clamp(42px,6.2vw,78px);line-height:1;
+     text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--pink)}
+  h2{font-family:var(--disp);font-weight:850;font-size:clamp(24px,3.2vw,38px);
+     text-transform:uppercase;letter-spacing:-.01em;margin-bottom:8px}
+  .sub{color:var(--muted);font-size:14px;line-height:1.75;max-width:56ch;margin-top:18px}
+  .sub b{color:var(--ink);font-weight:400}
 
-  /* metric chips — surface buried numbers as glowing pills */
-  .chiprow{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
-  .chip{
-    font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);
-    border:1px solid var(--line);padding:4px 10px;border-radius:20px;
-    background:rgba(0,229,255,0.04);box-shadow:0 0 10px rgba(0,229,255,0.08);
-    white-space:nowrap;
-  }
+  .cta{display:flex;gap:12px;margin-top:26px}
+  .btn{font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:11px 20px;
+       border:1px solid var(--hair);color:var(--muted);cursor:pointer;background:none;font-family:var(--mono)}
+  .btn.p{border-color:var(--pink);color:var(--pink)}
+  .btn:hover{color:var(--ink);border-color:var(--ink)}
 
-  /* SECTION */
-  section{padding:96px 0;position:relative;z-index:2}
-  .label{color:var(--magenta);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px}
-  .label span{color:var(--muted)}
-  h2{font-family:'Orbitron';font-weight:700;font-size:clamp(24px,4vw,38px);letter-spacing:1px;margin-bottom:40px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--hair);
+         border:1px solid var(--hair);margin-top:40px;max-width:620px;font-variant-numeric:tabular-nums}
+  .stat{background:var(--bg);padding:16px 15px}
+  .stat .n{font-family:var(--disp);font-weight:850;font-size:20px;color:var(--ink)}
+  .stat .l{font-size:9px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-top:4px}
 
-  /* EXPERIENCE */
-  .job{border-left:1px solid var(--line);padding:0 0 40px 26px;position:relative}
-  .job::before{content:"";position:absolute;left:-5px;top:6px;width:9px;height:9px;background:var(--magenta);border-radius:50%;box-shadow:0 0 12px var(--magenta)}
-  .job:last-child{padding-bottom:0}
-  .job .role{font-size:18px;color:var(--ink);font-weight:500}
-  .job .meta{font-size:13px;color:var(--cyan);margin:2px 0 14px}
-  .job ul{list-style:none;display:flex;flex-direction:column;gap:9px}
-  .job li{font-size:14px;color:var(--violet);padding-left:18px;position:relative}
-  .job li::before{content:"▸";position:absolute;left:0;color:var(--magenta)}
-  /* sub-project under a single role — cyan node branching off the magenta company line */
-  .subjob{position:relative;margin-top:24px;padding-left:20px;border-left:1px solid var(--line);scroll-margin-top:110px}
-  .subjob::before{content:"";position:absolute;left:-4px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--bg2);border:1.5px solid var(--cyan);box-shadow:0 0 9px rgba(0,229,255,0.55)}
-  .subjob .proj{font-size:15.5px;color:var(--ink);font-weight:500;letter-spacing:.3px}
-  .subjob .pdate{font-size:12px;color:var(--cyan);margin:3px 0 13px}
-  .subjob .pdate b{color:var(--muted);font-weight:400}
-  /* ---- HLD portal button: breathing hex orb + cyberpunk hover ---- */
-  .hld-portal{
-    position:relative;display:inline-flex;align-items:center;gap:13px;margin-top:16px;
-    padding:12px 20px 12px 15px;cursor:pointer;
-    font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);
-    background:rgba(8,8,26,.55);border:1px solid var(--line);
-    transition:color .28s, box-shadow .28s, border-color .28s, transform .28s;
-  }
-  /* flowing magenta·cyan border, revealed on hover (mask trick — matches the WIP frame) */
-  .hld-portal::before{
-    content:"";position:absolute;inset:0;padding:1px;pointer-events:none;opacity:0;transition:opacity .3s;
-    background:linear-gradient(90deg,var(--magenta),var(--cyan),var(--magenta),var(--cyan),var(--magenta));
-    background-size:300% 100%;
-    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor;mask-composite:exclude;
-  }
-  .hp-orb{position:relative;width:28px;height:28px;flex:none;display:grid;place-items:center}
-  .hp-hex{width:23px;height:23px;display:block;animation:hpbreath 2.8s ease-in-out infinite}
-  @keyframes hpbreath{
-    0%,100%{filter:drop-shadow(0 0 3px rgba(0,229,255,.7))}
-    50%{filter:drop-shadow(0 0 9px var(--magenta)) drop-shadow(0 0 3px var(--cyan))}
-  }
-  .hp-core{transition:fill .28s, filter .28s}
-  .hp-ring{position:absolute;inset:2px;border-radius:50%;border:1px solid var(--cyan);opacity:0;pointer-events:none}
-  .hp-ring.r2{border-color:var(--magenta)}
-  .hp-txt{position:relative;z-index:2;transition:text-shadow .28s, letter-spacing .28s}
-  .hp-arrow{font-size:14px;transition:transform .28s, filter .28s}
-  .hld-portal:hover{
-    color:var(--ink);border-color:transparent;transform:translateY(-2px);
-    box-shadow:0 0 22px rgba(0,229,255,.30), 0 0 44px rgba(255,45,149,.18), inset 0 0 14px rgba(0,229,255,.10);
-  }
-  .hld-portal:hover::before{opacity:1;animation:hpflow 2.4s linear infinite}
-  @keyframes hpflow{to{background-position:300% 0}}
-  .hld-portal:hover .hp-ring{animation:hpring 1.5s ease-out infinite}
-  .hld-portal:hover .hp-ring.r2{animation-delay:.55s}
-  @keyframes hpring{0%{opacity:.85;transform:scale(.55)}100%{opacity:0;transform:scale(2.1)}}
-  .hld-portal:hover .hp-hex{animation-duration:1.4s;filter:drop-shadow(0 0 10px var(--cyan)) drop-shadow(0 0 5px var(--magenta))}
-  .hld-portal:hover .hp-core{fill:var(--cyan);filter:drop-shadow(0 0 4px var(--cyan))}
-  .hld-portal:hover .hp-txt{letter-spacing:2.6px;text-shadow:0 0 8px rgba(0,229,255,.65),0 0 16px rgba(255,45,149,.35)}
-  .hld-portal:hover .hp-arrow{transform:translateX(5px);filter:drop-shadow(0 0 6px var(--cyan))}
-  @media(prefers-reduced-motion:reduce){.hp-hex,.hp-ring,.hld-portal::before{animation:none!important}}
+  .lede-line{font-size:12px;color:var(--muted);margin-bottom:26px;letter-spacing:.04em}
+  .lede-line b{color:var(--ink);font-weight:700}
 
-  /* PROJECTS / SKILLS cards */
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;grid-auto-rows:1fr}
-  .card{
-    background:rgba(8,8,26,0.72);border:1px solid var(--line);padding:24px;position:relative;
-    transition:transform .25s, border-color .25s, box-shadow .25s;overflow:hidden;backdrop-filter:blur(2px);
-  }
-  .card::before{content:"";position:absolute;top:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--magenta),var(--cyan));transition:width .35s}
-  .card:hover{transform:translateY(-4px);border-color:var(--cyan);box-shadow:0 8px 30px rgba(0,0,0,0.4)}
-  .card:hover::before{width:100%}
-  .card h3{font-size:16px;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;width:100%}
-  .card h3 .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
-  .card .ext{margin-left:auto;color:var(--muted);font-size:14px;transition:color .25s}
-  a.card{display:block;color:inherit}
-  a.card:hover .ext{color:var(--cyan)}
-  .card p{font-size:13.5px;color:var(--violet)}
-  .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
-  .tag{font-size:10px;letter-spacing:1px;color:var(--cyan);border:1px solid var(--line);padding:4px 9px;text-transform:uppercase}
+  .chip{display:inline-block;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+        color:var(--ink);border:1px solid var(--hair);padding:3px 10px;border-radius:99px;margin:0 5px 6px 0}
 
-  /* SKILLS list */
-  .skillrow{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--line);align-items:baseline}
-  .skillrow .k{min-width:160px;color:var(--magenta);font-size:12px;letter-spacing:1px;text-transform:uppercase}
-  .skillrow .v{color:var(--violet);font-size:14px}
-  @media(max-width:560px){.skillrow{flex-direction:column;gap:4px}}
+  /* EXPERIENCE grid */
+  .jobs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:980px}
+  .job{border:1px solid var(--hair);padding:18px 20px}
+  .job h3{font-size:14px;font-weight:700;margin-bottom:3px}
+  .pdate{font-size:10.5px;color:var(--muted);margin-bottom:9px}
+  .job ul{list-style:none;margin-top:2px}
+  .job li{font-size:11.5px;color:var(--muted);line-height:1.65}
+  .job li::before{content:"— ";color:var(--muted)}
+  .portal{display:inline-block;margin-top:10px;font-size:10px;letter-spacing:.18em;
+          text-transform:uppercase;color:var(--ink);border:1px solid rgba(255,255,255,.35);padding:7px 14px}
+  .portal:hover{background:var(--ink);color:#000}
+
+  /* PROJECTS */
+  .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;max-width:980px}
+  .card{border:1px solid var(--hair);padding:18px 20px}
+  .card h3{font-size:13.5px;font-weight:700;margin-bottom:7px}
+  .card h3 i{font-style:normal;color:var(--muted)}
+  .card p{font-size:11.5px;color:var(--muted);line-height:1.65;margin-bottom:10px}
+  .card .chip{color:var(--muted)}
+  .card .portal{margin-top:12px}
+
+  /* SKILLS + WRITING */
+  .skillrow{display:grid;grid-template-columns:110px 1fr;gap:8px 18px;max-width:760px;
+            align-items:baseline;margin-bottom:6px}
+  .skillrow .l{font-size:9.5px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+  .write{border:1px solid var(--hair);padding:16px 20px;max-width:560px;margin-top:34px}
+  .write h3{font-size:13px;font-weight:700;margin-bottom:5px}
+  .write p{font-size:11.5px;color:var(--muted);line-height:1.6}
+  .write a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 
   /* CONTACT */
-  .contact{text-align:center;padding:110px 0}
-  .contact h2{margin-bottom:16px}
-  .contact p{color:var(--violet);max-width:440px;margin:0 auto 30px}
-  .clinks{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+  .links{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+  .links a{font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--hair);
+           padding:11px 18px;color:var(--muted)}
+  .links a:hover{color:var(--ink);border-color:var(--ink)}
+  .term{margin-top:56px;font-size:11px;color:var(--muted)}
+  .term b{color:var(--ink);font-weight:400}
 
-  footer{border-top:1px solid var(--line);padding:26px 0;text-align:center;color:var(--muted);font-size:12px}
+  /* DASH INDICATOR */
+  .dots{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:11px}
+  .dots i{width:24px;height:2px;background:var(--hair);cursor:pointer}
+  .dots i.on{background:var(--pink)}
+  .hint{position:fixed;bottom:19px;left:34px;z-index:100;font-size:9.5px;
+        letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+
+  @media(prefers-reduced-motion:reduce){#track{transition:none!important}}
+
+  /* MOBILE — deck unstacks to vertical */
+  @media(max-width:680px){
+    main{height:auto;overflow:visible}
+    #track{display:block;height:auto;transform:none!important;transition:none}
+    section{min-width:0;height:auto;min-height:60vh;padding:86px 24px 40px}
+    .jobs,.cards{grid-template-columns:1fr}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .skillrow{grid-template-columns:1fr;gap:2px 0;margin-bottom:12px}
+    .dots,.hint,.bignum{display:none}
+    nav{padding:12px 18px}
+    .navlinks{gap:12px;font-size:9px;letter-spacing:.12em}
+  }
 </style>
 </head>
 <body>
-
-<div class="progress" id="progress"></div>
-
-<div class="stars"><i class="s1"></i><i class="s2"></i><i class="s3"></i></div>
-
-<nav><div class="wrap">
-  <div class="logo">D<b>//</b>B</div>
+<nav>
+  <a class="logo" href="#" data-go="0">D<b>//</b>B</a>
   <div class="navlinks">
-    <a href="#work">work</a>
-    <a href="#projects">projects</a>
-    <a href="#skills">skills</a>
-    <a href="#writing">writing</a>
-    <a href="#contact">contact</a>
+    <a data-go="1" id="nl-work">work</a><a data-go="2">projects</a><a data-go="3">skills</a><a data-go="3">writing</a><a data-go="4">contact</a>
   </div>
-</div></nav>
+</nav>
 
-<header>
-  <div class="sun"></div>
-  <div class="grid-floor"></div>
-  <div class="wrap hero-inner">
-    <div class="tagline">Backend Engineer · Distributed Systems &amp; AI</div>
-    <h1>DIVYAM<br><span class="accent">BHUTANI</span></h1>
-    <p class="sub">I build high-reliability payment systems — event-driven pipelines, reconciliation infra, and the odd agentic-AI experiment. 4 years across fintech + startups.</p>
+<main><div id="track">
+
+  <section id="s0">
+    <div class="tag">— Backend Engineer · Distributed Systems &amp; AI</div>
+    <h1>Divyam<br><em>Bhutani</em></h1>
+    <p class="sub">I build payment systems that don't lose money — <b>and the odd AI experiment.</b></p>
     <div class="cta">
-      <a href="#work" class="btn primary">View Work</a>
-      <a href="#contact" class="btn ghost">Get in touch</a>
+      <button class="btn p" data-go="1">view work →</button>
+      <button class="btn" data-go="4">get in touch</button>
     </div>
     <div class="stats">
       <div class="stat"><div class="n">4 yrs</div><div class="l">Experience</div></div>
@@ -314,172 +149,159 @@
       <div class="stat"><div class="n">2.5×</div><div class="l">Throughput</div></div>
       <div class="stat"><div class="n">8×</div><div class="l">Faster CI</div></div>
     </div>
-  </div>
-</header>
+  </section>
 
-<section id="work"><div class="wrap">
-  <div class="label">01 <span>//</span> Experience</div>
-  <h2>Where I've shipped</h2>
-
-  <div class="job">
-    <div class="role">Software Development Engineer</div>
-    <div class="meta">Juspay · Global Fintech Infrastructure · Jul 2022 – Dec 2025</div>
-
-    <div class="subjob" id="settlement">
-      <div class="proj">Reconciliation &amp; Settlement Platform</div>
-      <div class="pdate">Solo Architect → Team Lead <b>· Feb 2025 – Dec 2025</b></div>
-      <div class="chiprow"><span class="chip">1→8 team</span></div>
-      <ul>
-        <li>Built from zero — Python, FastAPI, Kafka, Postgres; design → deploy → ops</li>
-        <li>Scaled team 1 → 8; hiring, mentoring, design reviews</li>
-        <li>Event-driven recon (idempotent, retry-safe) + automated Visa/RuPay uploads, killing midnight ops</li>
-      </ul>
-      <a class="hld-portal" href="settlement-hld.html">
-        <span class="hp-orb"><span class="hp-ring"></span><span class="hp-ring r2"></span>
-          <svg class="hp-hex" viewBox="0 0 24 24" fill="none"><path d="M12 2 21 7.2v9.6L12 22 3 16.8V7.2z" stroke="#00e5ff" stroke-width="1.6"/><circle class="hp-core" cx="12" cy="12" r="2.5" fill="#ff2d95"/></svg>
-        </span><span class="hp-txt">Open 3D system map</span><span class="hp-arrow">→</span></a>
+  <section id="s1">
+    <div class="bignum" aria-hidden="true">01</div>
+    <div class="tag">01 · Experience</div>
+    <h2>Where I've shipped</h2>
+    <p class="lede-line"><b>Software Development Engineer — Juspay</b> · Global Fintech Infrastructure · Jul 2022 – Dec 2025</p>
+    <div class="jobs">
+      <div class="job">
+        <h3>Reconciliation &amp; Settlement Platform</h3>
+        <div class="pdate">Solo Architect → Team Lead · Feb 2025 – Dec 2025</div>
+        <span class="chip">1→8 team</span><span class="chip">Python</span><span class="chip">Kafka</span>
+        <ul>
+          <li>Built from zero — design to deploy to ops</li>
+          <li>Automated Visa/RuPay uploads — killed midnight ops</li>
+        </ul>
+        <a class="portal" href="settlement-hld.html">open 3D system map →</a>
+      </div>
+      <div class="job">
+        <h3>Card Payment Gateway</h3>
+        <div class="pdate">Jan 2024 – Feb 2025</div>
+        <span class="chip">0→10K+ txns/day</span><span class="chip">2.5× throughput</span><span class="chip">CI 35→4 min</span>
+        <ul>
+          <li>One of 4 engineers scaling it to 10K+ daily txns; led the HSBC HK launch</li>
+        </ul>
+      </div>
+      <div class="job">
+        <h3>Card Discovery Service</h3>
+        <div class="pdate">Solo · Jul 2022 – Aug 2023</div>
+        <span class="chip">80K+ cards</span><span class="chip">Haskell</span>
+        <ul>
+          <li>Sole engineer — tokenized cards for Epifi, OneCard, HDFC</li>
+        </ul>
+      </div>
+      <div class="job">
+        <h3>Convosight — Intern</h3>
+        <div class="pdate">Remote (US startup) · Nov 2021 – Apr 2022</div>
+        <span class="chip">Node.js</span><span class="chip">Go</span><span class="chip">AWS</span>
+        <ul>
+          <li>Shipped Reviews + Notifications backends for a US startup</li>
+        </ul>
+      </div>
     </div>
+  </section>
 
-    <div class="subjob">
-      <div class="proj">Card Payment Gateway</div>
-      <div class="pdate"><b>Jan 2024 – Feb 2025</b></div>
-      <div class="chiprow"><span class="chip">0→10K+ txns/day</span><span class="chip">2.5× throughput</span><span class="chip">CI 35→4 min</span></div>
-      <ul>
-        <li>One of 4 scaling the gateway 0 → 10K+ daily txns; led HSBC HK onboarding</li>
-        <li>Pluggable payment abstraction — new networks just add types + API calls (UnionPay)</li>
-        <li>Key/cert rotation + master-key DB encryption</li>
-      </ul>
+  <section id="s2">
+    <div class="bignum" aria-hidden="true">02</div>
+    <div class="tag">02 · Personal Projects</div>
+    <h2>Built on my own time</h2>
+    <div class="cards">
+      <div class="card">
+        <h3><i>●</i> Crawl Core</h3>
+        <p>Give it any URL — it returns the clean text and what the page is about.</p>
+        <div><span class="chip">FastAPI</span><span class="chip">Playwright</span></div>
+        <a class="portal" href="crawl-hld.html">open 3D system map →</a>
+      </div>
+      <div class="card">
+        <h3><i>●</i> JobSherpa</h3>
+        <p>Turns a resume + job post into a PDF interview prep guide.</p>
+        <div><span class="chip">Agents</span><span class="chip">ATS scoring</span></div>
+      </div>
+      <div class="card">
+        <h3><i>●</i> YT Trending Insights</h3>
+        <p>Emails a PDF of what's trending on YouTube, every Monday.</p>
+        <div><span class="chip">Claude</span><span class="chip">Automation</span></div>
+      </div>
+      <div class="card">
+        <h3><i>●</i> Perch</h3>
+        <p>Menu-bar system stats for macOS.</p>
+        <div><span class="chip">macOS</span></div>
+      </div>
+      <div class="card">
+        <h3><i>●</i> Multipart Uploader</h3>
+        <p>Uploads huge files to S3 in chunks — my learn-Go project.</p>
+        <div><span class="chip">Go</span><span class="chip">S3</span></div>
+      </div>
     </div>
+  </section>
 
-    <div class="subjob">
-      <div class="proj">Card Discovery Service</div>
-      <div class="pdate">Solo <b>· Jul 2022 – Aug 2023</b></div>
-      <div class="chiprow"><span class="chip">80K+ cards</span></div>
-      <ul>
-        <li>Sole engineer — Haskell, MySQL, Redis on K8s; CI/CD Bitbucket + Jenkins</li>
-        <li>Observability (Kibana, Prometheus, Grafana); tokenized 80K+ cards (Epifi, OneCard, HDFC)</li>
-      </ul>
+  <section id="s3">
+    <div class="bignum" aria-hidden="true">03</div>
+    <div class="tag">03 · Skills + Writing</div>
+    <h2>Toolbox</h2>
+    <div style="margin-top:14px">
+      <div class="skillrow"><span class="l">Languages</span><span><span class="chip">Python</span><span class="chip">Go</span><span class="chip">Haskell</span><span class="chip">SQL</span></span></div>
+      <div class="skillrow"><span class="l">Backend</span><span><span class="chip">FastAPI</span><span class="chip">Node.js</span></span></div>
+      <div class="skillrow"><span class="l">Data &amp; Obs</span><span><span class="chip">Kafka</span><span class="chip">PostgreSQL</span><span class="chip">Redis</span><span class="chip">Prometheus</span><span class="chip">Grafana</span></span></div>
+      <div class="skillrow"><span class="l">Cloud</span><span><span class="chip">AWS</span><span class="chip">K8s</span><span class="chip">Serverless</span></span></div>
+      <div class="skillrow"><span class="l">AI</span><span><span class="chip">LLM APIs</span><span class="chip">Claude Code</span><span class="chip">Agent pipelines</span></span></div>
     </div>
-  </div>
-
-  <div class="job">
-    <div class="role">Software Development Engineer — Intern</div>
-    <div class="meta">Convosight · Remote (US startup) · Nov 2021 – Apr 2022</div>
-    <ul>
-      <li>Backend APIs — Node.js, Go, Serverless on AWS; shipped Reviews + Notifications</li>
-      <li>Migrated Go Lambdas → TypeScript; built Metabase analytics dashboards</li>
-    </ul>
-  </div>
-</div></section>
-
-<section id="projects"><div class="wrap">
-  <div class="label">02 <span>//</span> Personal Projects</div>
-  <h2>Built on my own time</h2>
-  <p style="color:var(--muted);font-size:13px;margin:-26px 0 34px;max-width:520px">Curiosity projects — agentic AI pipelines and dev tooling. Work lives under Experience.</p>
-  <div class="cards">
-    <div class="card" id="crawl">
-      <h3><span class="dot"></span><a href="https://github.com/divyambhutani/crawl_core" target="_blank" rel="noopener">Crawl Core</a><a class="ext" href="https://github.com/divyambhutani/crawl_core" target="_blank" rel="noopener">↗</a></h3>
-      <p>FastAPI crawler — fetches any URL, extracts clean text, classifies type/topics/summary (BART-MNLI local · Gemini cloud). HLD scales it to a billions-of-URLs/month Kafka pipeline.</p>
-      <div class="tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Kafka</span><span class="tag">ClickHouse</span><span class="tag">System Design</span></div>
-      <a class="hld-portal" href="crawl-hld.html">
-        <span class="hp-orb"><span class="hp-ring"></span><span class="hp-ring r2"></span>
-          <svg class="hp-hex" viewBox="0 0 24 24" fill="none"><path d="M12 2 21 7.2v9.6L12 22 3 16.8V7.2z" stroke="#00e5ff" stroke-width="1.6"/><circle class="hp-core" cx="12" cy="12" r="2.5" fill="#ff2d95"/></svg>
-        </span><span class="hp-txt">Open 3D system map</span><span class="hp-arrow">→</span></a>
+    <div class="write">
+      <h3>Node.js fs module — deep dive</h3>
+      <p>Published on <a href="https://www.geeksforgeeks.org/" target="_blank" rel="noopener">GeeksforGeeks</a> · more coming soon.</p>
     </div>
-    <a href="https://github.com/divyambhutani/job_sherpa_old" target="_blank" rel="noopener" class="card">
-      <h3><span class="dot"></span>JobSherpa <span class="ext">↗</span></h3>
-      <p>Parses a resume + JD, scrapes live interview/salary data (Glassdoor, Levels.fyi), outputs a visual PDF with ATS scoring + interview roadmap.</p>
-      <div class="tags"><span class="tag">Python</span><span class="tag">Google ADK</span><span class="tag">WeasyPrint</span><span class="tag">matplotlib</span></div>
-    </a>
-    <a href="https://github.com/divyambhutani/YT_Trending_Insights" target="_blank" rel="noopener" class="card">
-      <h3><span class="dot"></span>YT Trending Insights <span class="ext">↗</span></h3>
-      <p>Weekly pipeline — pulls top YouTube videos + transcripts, finds patterns with Claude, emails a PDF infographic every Monday.</p>
-      <div class="tags"><span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">Automation</span></div>
-    </a>
-    <a href="https://github.com/divyambhutani/perch" target="_blank" rel="noopener" class="card">
-      <h3><span class="dot"></span>Perch <span class="ext">↗</span></h3>
-      <p>Native macOS app that watches your active coding-agent sessions. Built to scratch my own itch.</p>
-      <div class="tags"><span class="tag">Swift</span><span class="tag">macOS</span><span class="tag">Agents</span></div>
-    </a>
-    <a href="https://github.com/divyambhutani/multipart-multifile-uploader" target="_blank" rel="noopener" class="card">
-      <h3><span class="dot"></span>Multipart Uploader <span class="ext">↗</span></h3>
-      <p>Go CLI from my first internship — goroutines + the AWS S3 SDK to upload large files reliably via multipart chunks.</p>
-      <div class="tags"><span class="tag">Go</span><span class="tag">Concurrency</span><span class="tag">AWS S3</span></div>
-    </a>
-  </div>
-</div></section>
+  </section>
 
-<section id="skills"><div class="wrap">
-  <div class="label">03 <span>//</span> Stack</div>
-  <h2>Tools of the trade</h2>
-  <div class="skillrow"><div class="k">Languages</div><div class="v">Python · Go · Haskell · SQL</div></div>
-  <div class="skillrow"><div class="k">Backend</div><div class="v">FastAPI · Node.js · Haskell Stack · REST · Webhooks · Microservices</div></div>
-  <div class="skillrow"><div class="k">Data &amp; Obs</div><div class="v">Kafka · PostgreSQL · Redis · Prometheus · Grafana</div></div>
-  <div class="skillrow"><div class="k">Cloud &amp; DevOps</div><div class="v">AWS (S3, EC2, RDS, IAM, ECR, KMS) · Docker · Jenkins</div></div>
-  <div class="skillrow"><div class="k">AI &amp; Integrations</div><div class="v">LLM APIs (OpenAI, Anthropic) · Claude Code (Skills, MCP, Hooks) · Vertex AI</div></div>
-</div></section>
-
-<section id="writing"><div class="wrap">
-  <div class="label">04 <span>//</span> Writing</div>
-  <h2>Words &amp; notes</h2>
-  <div class="cards">
-    <a href="https://www.geeksforgeeks.org/what-is-file-system-module-in-node-js/" target="_blank" rel="noopener" class="card">
-      <h3><span class="dot"></span>What is the File System Module in Node.js? <span class="ext">↗</span></h3>
-      <p>A beginner-friendly walkthrough of file handling in Node.js — reading, writing, and working with the fs module.</p>
-      <div class="tags"><span class="tag">Node.js</span><span class="tag">GeeksforGeeks</span></div>
-    </a>
-    <div class="card" style="opacity:.55">
-      <h3><span class="dot" style="background:var(--muted);box-shadow:none"></span>More coming soon</h3>
-      <p>Notes on distributed systems, payments infra, and building with agentic AI. Drafts in progress.</p>
-      <div class="tags"><span class="tag">Systems</span><span class="tag">Fintech</span></div>
+  <section id="s4">
+    <div class="bignum" aria-hidden="true">04</div>
+    <div class="tag">04 · Contact</div>
+    <h2>Say hello</h2>
+    <p class="sub">Inbox is open.</p>
+    <div class="links">
+      <a href="mailto:divyambhutani40@gmail.com">email</a>
+      <a href="https://github.com/divyambhutani" target="_blank" rel="noopener">github</a>
+      <a href="https://www.linkedin.com/in/divyam-bhutani-4b992b16b/" target="_blank" rel="noopener">linkedin</a>
+      <a href="https://leetcode.com/divyambhutani/" target="_blank" rel="noopener">leetcode</a>
     </div>
-  </div>
-</div></section>
+    <p class="term"><b>divyam@portfolio:~$</b> built with caffeine &amp; kafka · © 2026</p>
+  </section>
 
-<section class="contact" id="contact"><div class="wrap">
-  <div class="label" style="justify-content:center">05 <span>//</span> Contact</div>
-  <h2>Let's build something</h2>
-  <p>Open to backend and distributed-systems roles. The fastest way to reach me is email.</p>
-  <div class="clinks">
-    <a href="mailto:divyambhutani40@gmail.com" class="btn primary">Email</a>
-    <a href="https://github.com/divyambhutani" target="_blank" rel="noopener" class="btn ghost">GitHub</a>
-    <a href="https://www.linkedin.com/in/divyam-bhutani-4b992b16b/" target="_blank" rel="noopener" class="btn ghost">LinkedIn</a>
-    <a href="https://leetcode.com/divyambhutani/" target="_blank" rel="noopener" class="btn ghost">LeetCode</a>
-  </div>
-</div></section>
+</div></main>
 
-<footer>
-  <div class="wrap">divyam@portfolio:~$ built with caffeine &amp; kafka · © 2026</div>
-</footer>
+<div class="dots" id="dots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+<div class="hint">scroll / ← → to navigate</div>
 
 <script>
-  // scroll-progress rail
-  var bar = document.getElementById('progress');
-  function tick(){
-    var h = document.documentElement;
-    var max = h.scrollHeight - h.clientHeight;
-    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
-  }
-  window.addEventListener('scroll', tick, {passive:true});
-  window.addEventListener('resize', tick);
-  tick();
+(function(){
+  const track=document.getElementById('track');
+  const dots=[...document.querySelectorAll('#dots i')];
+  const navlinks=[...document.querySelectorAll('.navlinks a')];
+  const N=5;
+  const mobile=()=>matchMedia('(max-width:680px)').matches;
+  let i=0,lock=false;
 
-  // active-section nav highlight
-  var links = {};
-  document.querySelectorAll('.navlinks a').forEach(function(a){
-    links[a.getAttribute('href').slice(1)] = a;
-  });
-  var obs = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        Object.values(links).forEach(function(a){a.classList.remove('active')});
-        var link = links[e.target.id];
-        if(link) link.classList.add('active');
-      }
+  function paint(){
+    dots.forEach((d,j)=>d.classList.toggle('on',j===i));
+    navlinks.forEach(a=>{
+      const t=+a.dataset.go;
+      a.classList.toggle('active',t===i||(i===3&&t===3));
     });
-  }, {rootMargin:'-45% 0px -50% 0px'});
-  document.querySelectorAll('section[id]').forEach(function(s){obs.observe(s)});
+  }
+  function go(n){
+    n=Math.max(0,Math.min(N-1,n));
+    if(mobile()){document.getElementById('s'+n).scrollIntoView({behavior:'smooth'});i=n;paint();return}
+    i=n;track.style.transform='translateX('+(-i*innerWidth)+'px)';paint();
+  }
+  addEventListener('wheel',e=>{
+    if(mobile()||lock)return;
+    if(Math.abs(e.deltaY)+Math.abs(e.deltaX)<12)return;
+    lock=true;setTimeout(()=>lock=false,620);
+    go(i+((e.deltaY||e.deltaX)>0?1:-1));
+  },{passive:true});
+  addEventListener('keydown',e=>{
+    if(mobile())return;
+    if(e.key==='ArrowRight')go(i+1);
+    if(e.key==='ArrowLeft')go(i-1);
+  });
+  addEventListener('resize',()=>{if(!mobile())go(i);else track.style.transform=''});
+  document.querySelectorAll('[data-go]').forEach(el=>
+    el.addEventListener('click',ev=>{ev.preventDefault();go(+el.dataset.go)}));
+  dots.forEach((d,j)=>d.addEventListener('click',()=>go(j)));
+  paint();
+})();
 </script>
-
 </body>
 </html>

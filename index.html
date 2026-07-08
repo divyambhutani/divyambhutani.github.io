@@ -31,15 +31,15 @@
     overflow-x:hidden;
     position:relative;
   }
-  /* scanline overlay — starts below the 30px WIP ribbon so the ribbon stays crisp */
+  /* scanline overlay */
   body::after{
-    content:"";position:fixed;top:30px;left:0;right:0;bottom:0;z-index:9999;pointer-events:none;
+    content:"";position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;pointer-events:none;
     background:linear-gradient(transparent 50%, rgba(0,0,0,0.22) 50%);
     background-size:100% 4px;opacity:0.25;
   }
-  /* grain — also kept off the ribbon strip */
+  /* grain */
   body::before{
-    content:"";position:fixed;top:30px;left:0;right:0;bottom:0;z-index:9998;pointer-events:none;opacity:0.04;
+    content:"";position:fixed;top:0;left:0;right:0;bottom:0;z-index:9998;pointer-events:none;opacity:0.04;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   a{color:inherit;text-decoration:none}
@@ -90,50 +90,16 @@
     .stars i{animation:none;opacity:0.7}
   }
 
-  /* WIP ribbon — A2: flowing neon frame, clean text, single yellow-dash runner (above scanline/grain overlays) */
-  .wip{
-    position:fixed;top:0;left:0;right:0;z-index:101;height:30px;overflow:hidden;
-    display:flex;align-items:center;justify-content:center;gap:13px;
-    font-size:11px;letter-spacing:4px;text-transform:uppercase;font-weight:700;
-    background:#06060f;
+  /* scroll-progress rail — pinned to the very top, tracks scroll % */
+  .progress{
+    position:fixed;top:0;left:0;height:2px;width:0;z-index:102;pointer-events:none;
+    background:linear-gradient(90deg,var(--magenta),var(--cyan));
+    box-shadow:0 0 8px rgba(0,229,255,0.6),0 0 4px rgba(255,45,149,0.5);
   }
-  /* flowing magenta·cyan frame — no yellow, so the runner is the only yellow */
-  .wip::before{
-    content:"";position:absolute;inset:0;z-index:1;padding:2px;pointer-events:none;
-    background:linear-gradient(90deg,var(--magenta),var(--cyan),var(--magenta),var(--cyan),var(--magenta));
-    background-size:300% 100%;
-    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor;mask-composite:exclude;
-    animation:wipflow 2.6s linear infinite;
-  }
-  @keyframes wipflow{to{background-position:300% 0}}
-  /* clean neon text — matches A2 sample (no chromatic tears) */
-  .wip-txt{
-    position:relative;z-index:2;white-space:nowrap;color:var(--ink);
-    text-shadow:0 0 6px rgba(0,229,255,0.5);
-  }
-  /* yellow HUD corner brackets — static */
-  .wip .sym{color:var(--yellow);z-index:2;font-size:14px;line-height:1;text-shadow:0 0 6px var(--yellow),0 0 14px rgba(252,238,10,0.6)}
-  /* A2 — single yellow-neon dash runner: the only yellow on the frame, laps it at a trackable pace */
-  .wip .dash{position:absolute;z-index:3;pointer-events:none;background:var(--yellow);border-radius:3px;
-    box-shadow:0 0 4px #fffbe0,0 0 10px var(--yellow),0 0 20px var(--yellow),0 0 34px rgba(252,238,10,0.55);
-    animation:wipdash 4.5s linear infinite}
-  @keyframes wipdash{
-    0%   {top:1px;             left:0;                  width:40px;height:5px}
-    24%  {top:1px;             left:calc(100% - 40px);  width:40px;height:5px}
-    27%  {top:1px;             left:calc(100% - 5px);   width:5px; height:22px}
-    48%  {top:calc(100% - 23px);left:calc(100% - 5px);  width:5px; height:22px}
-    51%  {top:calc(100% - 5px); left:calc(100% - 40px); width:40px;height:5px}
-    75%  {top:calc(100% - 5px); left:0;                 width:40px;height:5px}
-    78%  {top:calc(100% - 23px);left:0;                 width:5px; height:22px}
-    99%  {top:1px;             left:0;                  width:5px; height:22px}
-    100% {top:1px;             left:0;                  width:40px;height:5px}
-  }
-  @media(prefers-reduced-motion:reduce){.wip *,.wip::before{animation:none!important}}
 
   /* NAV */
   nav{
-    position:fixed;top:30px;left:0;right:0;z-index:100;
+    position:fixed;top:0;left:0;right:0;z-index:100;
     backdrop-filter:blur(10px);background:rgba(10,6,18,0.7);
     border-bottom:1px solid var(--line);
   }
@@ -145,6 +111,8 @@
   .navlinks a:hover{color:var(--cyan)}
   .navlinks a::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:1px;background:var(--cyan);transition:width .25s}
   .navlinks a:hover::after{width:100%}
+  .navlinks a.active{color:var(--cyan);text-shadow:0 0 8px rgba(0,229,255,0.5)}
+  .navlinks a.active::after{width:100%}
   @media(max-width:680px){.navlinks{display:none}}
 
   /* HERO */
@@ -201,11 +169,20 @@
   .tagline,h1,.sub,.cta{transform:translateY(18px)}
 
   /* STATS strip */
-  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:54px;opacity:0;animation:rise .7s .7s forwards}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:54px;opacity:0;animation:rise .7s .7s forwards}
   .stat{background:var(--bg2);padding:18px 16px}
   .stat .n{font-family:'Orbitron';font-weight:700;font-size:22px;color:var(--cyan)}
   .stat .l{font-size:10px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-top:4px}
   @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+  /* metric chips — surface buried numbers as glowing pills */
+  .chiprow{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+  .chip{
+    font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);
+    border:1px solid var(--line);padding:4px 10px;border-radius:20px;
+    background:rgba(0,229,255,0.04);box-shadow:0 0 10px rgba(0,229,255,0.08);
+    white-space:nowrap;
+  }
 
   /* SECTION */
   section{padding:96px 0;position:relative;z-index:2}
@@ -223,7 +200,7 @@
   .job li{font-size:14px;color:var(--violet);padding-left:18px;position:relative}
   .job li::before{content:"▸";position:absolute;left:0;color:var(--magenta)}
   /* sub-project under a single role — cyan node branching off the magenta company line */
-  .subjob{position:relative;margin-top:24px;padding-left:20px;border-left:1px solid var(--line)}
+  .subjob{position:relative;margin-top:24px;padding-left:20px;border-left:1px solid var(--line);scroll-margin-top:110px}
   .subjob::before{content:"";position:absolute;left:-4px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--bg2);border:1.5px solid var(--cyan);box-shadow:0 0 9px rgba(0,229,255,0.55)}
   .subjob .proj{font-size:15.5px;color:var(--ink);font-weight:500;letter-spacing:.3px}
   .subjob .pdate{font-size:12px;color:var(--cyan);margin:3px 0 13px}
@@ -271,7 +248,7 @@
   @media(prefers-reduced-motion:reduce){.hp-hex,.hp-ring,.hld-portal::before{animation:none!important}}
 
   /* PROJECTS / SKILLS cards */
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;grid-auto-rows:1fr}
   .card{
     background:rgba(8,8,26,0.72);border:1px solid var(--line);padding:24px;position:relative;
     transition:transform .25s, border-color .25s, box-shadow .25s;overflow:hidden;backdrop-filter:blur(2px);
@@ -305,7 +282,7 @@
 </head>
 <body>
 
-<div class="wip"><span class="dash"></span><span class="sym">⌜</span><span class="wip-txt">WIP — work in progress</span><span class="sym">⌟</span></div>
+<div class="progress" id="progress"></div>
 
 <div class="stars"><i class="s1"></i><i class="s2"></i><i class="s3"></i></div>
 
@@ -326,7 +303,7 @@
   <div class="wrap hero-inner">
     <div class="tagline">Backend Engineer · Distributed Systems &amp; AI</div>
     <h1>DIVYAM<br><span class="accent">BHUTANI</span></h1>
-    <p class="sub">I architect and operate high-reliability payment systems — event-driven pipelines, reconciliation infra, and the occasional agentic AI experiment. 4 years across fintech and high-growth startups.</p>
+    <p class="sub">I build high-reliability payment systems — event-driven pipelines, reconciliation infra, and the odd agentic-AI experiment. 4 years across fintech + startups.</p>
     <div class="cta">
       <a href="#work" class="btn primary">View Work</a>
       <a href="#contact" class="btn ghost">Get in touch</a>
@@ -334,6 +311,8 @@
     <div class="stats">
       <div class="stat"><div class="n">4 yrs</div><div class="l">Experience</div></div>
       <div class="stat"><div class="n">1 → 8</div><div class="l">Team scaled</div></div>
+      <div class="stat"><div class="n">2.5×</div><div class="l">Throughput</div></div>
+      <div class="stat"><div class="n">8×</div><div class="l">Faster CI</div></div>
     </div>
   </div>
 </header>
@@ -343,17 +322,17 @@
   <h2>Where I've shipped</h2>
 
   <div class="job">
-    <div class="role">Software Development Engineer — Team Lead</div>
+    <div class="role">Software Development Engineer</div>
     <div class="meta">Juspay · Global Fintech Infrastructure · Jul 2022 – Dec 2025</div>
 
-    <div class="subjob">
+    <div class="subjob" id="settlement">
       <div class="proj">Reconciliation &amp; Settlement Platform</div>
       <div class="pdate">Solo Architect → Team Lead <b>· Feb 2025 – Dec 2025</b></div>
+      <div class="chiprow"><span class="chip">1→8 team</span></div>
       <ul>
-        <li>Architected the platform from day one — owned the production tech stack (Python, FastAPI, Kafka, PostgreSQL), system design, deployment, and operations end-to-end.</li>
-        <li>Scaled the team from 1 to 8 engineers; ran technical interviews, mentored, led design reviews, and drove sprint execution in a high-ambiguity environment.</li>
-        <li>Designed event-driven reconciliation pipelines with idempotent processing, retries, and fault-tolerant execution; established on-call, alerting, and SOPs for SLA adherence.</li>
-        <li>Built automation (web + Windows app) for settlement-file uploads to Visa and RuPay, eliminating manual midnight operations.</li>
+        <li>Built from zero — Python, FastAPI, Kafka, Postgres; design → deploy → ops</li>
+        <li>Scaled team 1 → 8; hiring, mentoring, design reviews</li>
+        <li>Event-driven recon (idempotent, retry-safe) + automated Visa/RuPay uploads, killing midnight ops</li>
       </ul>
       <a class="hld-portal" href="settlement-hld.html">
         <span class="hp-orb"><span class="hp-ring"></span><span class="hp-ring r2"></span>
@@ -364,20 +343,21 @@
     <div class="subjob">
       <div class="proj">Card Payment Gateway</div>
       <div class="pdate"><b>Jan 2024 – Feb 2025</b></div>
+      <div class="chiprow"><span class="chip">0→10K+ txns/day</span><span class="chip">2.5× throughput</span><span class="chip">CI 35→4 min</span></div>
       <ul>
-        <li>One of four engineers scaling Juspay's card gateway from 0 → 10K+ daily transactions; led HSBC HK acquirer onboarding (non-3DS, SI/mandate/recurring).</li>
-        <li>Integrated the UnionPay network behind a pluggable payment abstraction — core logic centralised, each new integration only defines types and API calls.</li>
-        <li>Built key/certificate rotation and master-key encryption to securely store private keys in the DB, removing manual key management.</li>
-        <li>Improved throughput 2.5x (DB indexing, caching, execution-path optimization) and cut CI build time 35 → 4 min (8x) via dependency build caching and layer reuse.</li>
+        <li>One of 4 scaling the gateway 0 → 10K+ daily txns; led HSBC HK onboarding</li>
+        <li>Pluggable payment abstraction — new networks just add types + API calls (UnionPay)</li>
+        <li>Key/cert rotation + master-key DB encryption</li>
       </ul>
     </div>
 
     <div class="subjob">
       <div class="proj">Card Discovery Service</div>
-      <div class="pdate">End-to-End Owner <b>· Jul 2022 – Aug 2023</b></div>
+      <div class="pdate">Solo <b>· Jul 2022 – Aug 2023</b></div>
+      <div class="chiprow"><span class="chip">80K+ cards</span></div>
       <ul>
-        <li>Sole engineer designing, building, and operating the microservice — Haskell, MySQL, Redis; deployed on Kubernetes (Autopilot) with CI/CD via Bitbucket &amp; Jenkins.</li>
-        <li>Built logging &amp; observability with Kibana, Prometheus, Grafana; partnered with Epifi, OneCard, and HDFC to tokenize 80K+ newly issued cards.</li>
+        <li>Sole engineer — Haskell, MySQL, Redis on K8s; CI/CD Bitbucket + Jenkins</li>
+        <li>Observability (Kibana, Prometheus, Grafana); tokenized 80K+ cards (Epifi, OneCard, HDFC)</li>
       </ul>
     </div>
   </div>
@@ -386,8 +366,8 @@
     <div class="role">Software Development Engineer — Intern</div>
     <div class="meta">Convosight · Remote (US startup) · Nov 2021 – Apr 2022</div>
     <ul>
-      <li>Built backend APIs with Node.js, Go, and Serverless on AWS (DynamoDB, S3, AppSync, Lambda); shipped Reviews and Notifications features.</li>
-      <li>Migrated Go Lambdas to TypeScript Node.js and built Metabase SQL dashboards with page-level analytics.</li>
+      <li>Backend APIs — Node.js, Go, Serverless on AWS; shipped Reviews + Notifications</li>
+      <li>Migrated Go Lambdas → TypeScript; built Metabase analytics dashboards</li>
     </ul>
   </div>
 </div></section>
@@ -395,11 +375,11 @@
 <section id="projects"><div class="wrap">
   <div class="label">02 <span>//</span> Personal Projects</div>
   <h2>Built on my own time</h2>
-  <p style="color:var(--muted);font-size:13px;margin:-26px 0 34px;max-width:520px">Side projects where I chase curiosity — mostly agentic AI pipelines and developer tooling. Work projects live under Experience above.</p>
+  <p style="color:var(--muted);font-size:13px;margin:-26px 0 34px;max-width:520px">Curiosity projects — agentic AI pipelines and dev tooling. Work lives under Experience.</p>
   <div class="cards">
     <div class="card" id="crawl">
       <h3><span class="dot"></span><a href="https://github.com/divyambhutani/crawl_core" target="_blank" rel="noopener">Crawl Core</a><a class="ext" href="https://github.com/divyambhutani/crawl_core" target="_blank" rel="noopener">↗</a></h3>
-      <p>Systems-design assignment + live service. A FastAPI crawler that fetches any URL (curl_cffi with a Playwright fallback for JS-heavy pages), extracts metadata + clean body text, and classifies page type, topics &amp; summary (BART-MNLI zero-shot locally / Gemini Flash on cloud). The HLD scales this single unit into a billions-of-URLs/month Kafka pipeline with S3 + ClickHouse.</p>
+      <p>FastAPI crawler — fetches any URL, extracts clean text, classifies type/topics/summary (BART-MNLI local · Gemini cloud). HLD scales it to a billions-of-URLs/month Kafka pipeline.</p>
       <div class="tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Kafka</span><span class="tag">ClickHouse</span><span class="tag">System Design</span></div>
       <a class="hld-portal" href="crawl-hld.html">
         <span class="hp-orb"><span class="hp-ring"></span><span class="hp-ring r2"></span>
@@ -408,22 +388,22 @@
     </div>
     <a href="https://github.com/divyambhutani/job_sherpa_old" target="_blank" rel="noopener" class="card">
       <h3><span class="dot"></span>JobSherpa <span class="ext">↗</span></h3>
-      <p>Agentic AI pipeline that parses a resume + job description, scrapes real-time interview and salary data (Glassdoor, AmbitionBox, Levels.fyi), and generates a visual PDF report with rubrics, ATS scoring, and an interview roadmap.</p>
+      <p>Parses a resume + JD, scrapes live interview/salary data (Glassdoor, Levels.fyi), outputs a visual PDF with ATS scoring + interview roadmap.</p>
       <div class="tags"><span class="tag">Python</span><span class="tag">Google ADK</span><span class="tag">WeasyPrint</span><span class="tag">matplotlib</span></div>
     </a>
     <a href="https://github.com/divyambhutani/YT_Trending_Insights" target="_blank" rel="noopener" class="card">
       <h3><span class="dot"></span>YT Trending Insights <span class="ext">↗</span></h3>
-      <p>Weekly AI pipeline that fetches top YouTube videos, pulls transcripts, analyzes patterns with Claude, and auto-delivers a PDF infographic + slides via email every Monday.</p>
+      <p>Weekly pipeline — pulls top YouTube videos + transcripts, finds patterns with Claude, emails a PDF infographic every Monday.</p>
       <div class="tags"><span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">Automation</span></div>
     </a>
     <a href="https://github.com/divyambhutani/perch" target="_blank" rel="noopener" class="card">
       <h3><span class="dot"></span>Perch <span class="ext">↗</span></h3>
-      <p>A native macOS companion app for keeping watch on your active coding-agent sessions — built to scratch my own itch while working with agentic dev tools.</p>
+      <p>Native macOS app that watches your active coding-agent sessions. Built to scratch my own itch.</p>
       <div class="tags"><span class="tag">Swift</span><span class="tag">macOS</span><span class="tag">Agents</span></div>
     </a>
     <a href="https://github.com/divyambhutani/multipart-multifile-uploader" target="_blank" rel="noopener" class="card">
       <h3><span class="dot"></span>Multipart Uploader <span class="ext">↗</span></h3>
-      <p>CLI tool from my first internship to learn Go — explored goroutines, concurrency patterns, and the AWS S3 SDK while solving a real problem: uploading large files reliably via multipart chunks.</p>
+      <p>Go CLI from my first internship — goroutines + the AWS S3 SDK to upload large files reliably via multipart chunks.</p>
       <div class="tags"><span class="tag">Go</span><span class="tag">Concurrency</span><span class="tag">AWS S3</span></div>
     </a>
   </div>
@@ -471,6 +451,35 @@
 <footer>
   <div class="wrap">divyam@portfolio:~$ built with caffeine &amp; kafka · © 2026</div>
 </footer>
+
+<script>
+  // scroll-progress rail
+  var bar = document.getElementById('progress');
+  function tick(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', tick, {passive:true});
+  window.addEventListener('resize', tick);
+  tick();
+
+  // active-section nav highlight
+  var links = {};
+  document.querySelectorAll('.navlinks a').forEach(function(a){
+    links[a.getAttribute('href').slice(1)] = a;
+  });
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        Object.values(links).forEach(function(a){a.classList.remove('active')});
+        var link = links[e.target.id];
+        if(link) link.classList.add('active');
+      }
+    });
+  }, {rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('section[id]').forEach(function(s){obs.observe(s)});
+</script>
 
 </body>
 </html>
